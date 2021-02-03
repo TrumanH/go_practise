@@ -41,14 +41,14 @@ func (server *CenterServer)addPlayer(params string) error {
 	server.mutex.Lock()
 	defer server.mutex.Unlock()
 
-	append(server.players, player) // todo: optimise it with a unique elements structure
+	append(server.players, player) // todo: optimise it with a unique elements structure(set)
 	return nil
 }
 
 func (server *CenterServer)removePlayer(params string) error {
 	server.mutex.Lock()
 	defer server.mutex.Unlock()
-	// todo: if used a unique elements structure, here don't need for loop
+	// todo: use set here
 	for i, v := range server.players {
 		if v.Name == params {
 			if len(server.players) == 1 {

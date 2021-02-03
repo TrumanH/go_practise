@@ -22,9 +22,9 @@ func (client *IpcClient) Call(method, params string) (resp *Response, err error)
         return
     }
     client.conn <- string(b)
-    str := <-client.conn // 等待返回值
+    resp_str := <-client.conn // 等待返回值
     var resp1 Response
-    err = json.Unmarshal([]byte(str), &resp1)
+    err = json.Unmarshal([]byte(resp_str), &resp1)
     if err != nil {
         fmt.Println("Deserialise response error")
     }
