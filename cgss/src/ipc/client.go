@@ -2,6 +2,7 @@ package ipc
 
 // IPC 框架客户端
 import ( 
+    "fmt"
     "encoding/json"
 )
 

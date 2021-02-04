@@ -1,9 +1,10 @@
 package cg
 
 import (
+	"fmt"
 	"errors"
 	"encoding/json"
-	"ipc"
+	"src/ipc"
 )
 
 type CenterClient struct {
@@ -38,7 +39,7 @@ func (client *CenterClient) RemovePlayer(name string) error {
 func (client *CenterClient)ListPlayer(params string) (ps []*Player, err error) {
 	resp, _ := client.Call("listplayer", params)
 	if resp.Code != "200" {
-		err := errors.New(resp.Code)
+		err = errors.New(resp.Code)
 		return
 	}
 
@@ -47,8 +48,11 @@ func (client *CenterClient)ListPlayer(params string) (ps []*Player, err error) {
 }
 
 func (client *CenterClient)Broadcast(message string) error {
-	m : = &Message{content:message}
+	m := &Message{Content:message}
 	b, err := json.Marshal(m)
+	if err != nil {
+		return err
+	}
 	fmt.Println("Serialized string b: ", b)
 	resp, _ := client.Call("broadcast", string(b))
 	if resp.Code == "200" {

@@ -37,7 +37,7 @@ func (server *IpcServer) Connect() chan string {
                 break // 终止for循环
             }
             var req Request
-            err := json.Unmarshall([]byte(request), &req)
+            err := json.Unmarshal([]byte(request), &req)
             if err != nil {
                 fmt.Println("Invalid request format:", request)
             }
