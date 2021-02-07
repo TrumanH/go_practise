@@ -1,14 +1,15 @@
 package ipc
 
 import (
+    "fmt"
     "testing"
 )
 
 type EchoServer struct {
 }
 
-func (server *EchoServer) Handle(request string) string {
-    return "ECHO:" + request
+func (server *EchoServer) Handle(method, params string) *Response {
+    return &Response{Code:"200", Body: fmt.Sprintf("method: %v, params: %v", method, params)}
 }
 
 func (server *EchoServer) Name() string {
@@ -21,9 +22,12 @@ func TestIpc(t *testing.T) {
     client1 := NewIpcClient(server)
     client2 := NewIpcClient(server)
     
-    resp1 := client1.Call("From Client1")
-    resp2 := client2.Call("From Client2")
-    if resp1 != "ECHO:From Client1" || resp2 != "ECHO:From Client2" {
+    resp1, error1 := client1.Call("login", "From Client1")
+    resp2, error2 := client2.Call("", "From Client2")
+    if resp1.Body != "200" || error1 != nil {
+        t.Error("IpcClient.Call failed. resp1:", resp1, "resp2:", resp2)
+    }
+    if resp2.Body != "200" || error2 != nil {
         t.Error("IpcClient.Call failed. resp1:", resp1, "resp2:", resp2)
     }
     client1.Close()
